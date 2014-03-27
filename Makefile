@@ -174,9 +174,10 @@ deploy-production: Procfile sdist
 tdd:
 	. $(ACTIVATE); $(DEVELOPMENT_ENV) nosy
 
-.PHONY: foreman
-foreman: dev
-	. $(ACTIVATE); $(DEVELOPMENT_ENV) PYTHON_LOGCONFIG_LOG_TO_STDOUT=1 foreman start
+.PHONY: honcho foreman
+honcho: dev
+	. $(ACTIVATE); $(DEVELOPMENT_ENV) PYTHON_LOGCONFIG_LOG_TO_STDOUT=1 honcho start
+foreman: honcho
 
 
 -include Makefile.inc
