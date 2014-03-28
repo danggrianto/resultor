@@ -12,6 +12,7 @@ Sphinx
 caterer
 coverage
 docutils
+honcho
 logilab-astng
 logilab-common
 mock
