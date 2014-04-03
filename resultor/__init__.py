@@ -1,0 +1,1 @@
+"""Resultor module"""

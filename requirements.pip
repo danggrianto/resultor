@@ -1,4 +1,4 @@
-# XXX Add your dependencies here.
+Flask==0.10.1
 
 ################################################
 # DO NOT remove/modify the dependencies below. #
@@ -21,4 +21,3 @@ nosy
 pep8
 pep257
 pylint
-unittest2
