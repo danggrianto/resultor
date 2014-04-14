@@ -1,0 +1,16 @@
+.list-group-item {
+    display: block;
+    margin: 10px;
+}
+
+.right {
+    display: block;
+    float: right;
+    width: 50%;
+    margin-left: 10px;
+    text-align: right;
+}
+
+.right span {
+    margin: 10px;
+}
