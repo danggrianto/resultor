@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Resultor
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/index.css">
+{% endblock %}
+
+{% block body %}
+<div class="list-group">
+  <a href="/pass" class="list-group-item list-group-item-success">
+    <span class="left">
+          passing test
+    </span>
+    <span class="right">
+        <span class="total"><strong>total: </strong>10</span>
+        <span class="average"><strong>average: </strong>7s</span>
+        <span class="current"><strong>current: </strong>5s</span>
+    </span>
+  </a>
+  <a href="#" class="list-group-item list-group-item-warning">
+      <span class="left">
+            flappy test
+      </span>
+      <span class="right">
+          <span class="total"><strong>total: </strong>10</span>
+          <span class="average"><strong>average: </strong>7s</span>
+          <span class="current"><strong>current: </strong>5s</span>
+      </span>
+  </a>
+  <a href="#" class="list-group-item list-group-item-danger">
+      <span class="left">
+            failing test
+      </span>
+      <span class="right">
+          <span class="total"><strong>total: </strong>10</span>
+          <span class="average"><strong>average: </strong>7s</span>
+          <span class="current"><strong>current: </strong>5s</span>
+      </span>
+  </a>
+</div>
+{% endblock %}
