@@ -29,8 +29,9 @@
   </head>
 
   <body>
-
+    {% set active_page = active_page|default('home') -%}
   {% include 'navbar.html' %}
+
 
     <div class="container">
 
@@ -41,12 +42,13 @@
     </div><!-- /.container -->
 
 
-    {% block scripts %}
-    {% endblock %}
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+    {% block scripts %}
+    {% endblock %}
   </body>
 </html>

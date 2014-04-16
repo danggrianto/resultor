@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% set active_page = "modules" %}
+
+{% block title %}
+    All Modules
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/index.css">
+{% endblock %}
+
+{% block body %}
+<div class="page-header">
+  <h2>all modules</h2>
+</div>
+<div class="list-group">
+  {% for module in modules %}
+
+    {% set lgi = "list-group-item-success"%}
+    {% if "fail" in module.status %}
+      {% set lgi = "list-group-item-danger"%}
+    {% endif %}
+
+    <a href="/{{module._id}}" class="list-group-item {{lgi}}">
+      <span class="left">
+            {{module._id}}
+      </span>
+    </a>
+    
+  {% endfor %}
+</div>
+{% endblock %}

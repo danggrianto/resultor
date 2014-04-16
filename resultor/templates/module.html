@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{module}}
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="/static/css/index.css">
+{% endblock %}
+
+{% block body %}
+<div class="page-header">
+  <h2>{{module}}</h2>
+</div>
+<div class="list-group">
+  {% for test in tests %}
+    {% if test.status == "pass" %}
+      {% set lgi = "list-group-item-success"%}
+    {% else %}
+      {% set lgi = "list-group-item-danger"%}
+    {% endif %}
+
+    <a href="/{{module}}/{{test.name}}" class="list-group-item {{lgi}}">
+      <span class="left">
+            {{test.name}}
+      </span>
+      <span class="right">
+<!--           <span class="total"><strong>total: </strong>10</span>
+          <span class="average"><strong>average: </strong>7s</span>
+          <span class="current"><strong>current: </strong>5s</span> -->
+      </span>
+    </a>
+    
+  {% endfor %}
+</div>
+{% endblock %}
