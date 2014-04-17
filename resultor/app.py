@@ -56,13 +56,7 @@ def show_test(module, name):
     query = {'name': name, 'module': module}
     info = mongo.db.info.find_one_or_404(query)
     results = mongo.db.results.find(query).sort('timestamp', -1)
-    aggregation = [
-        {'$match': {
-            'module': module, 'name': name, 'status': 'pass'}},
-        {'$group': {
-            '_id': {'name': '$name', 'module': '$module'},
-            'average': {'$avg': "$duration"}}}]
-    average = mongo.db.results.aggregate(aggregation)['result'][0]['average']
+    average = mongo.db.info.find_one(query)['average']
     return render_template(
         'base_test.html', info=info, results=results, avg=round(average, 2))
 
@@ -87,8 +81,9 @@ class Result(Resource):
             {'$group': {
                 '_id': {'name': '$name', 'module': '$module'},
                 'average': {'$avg': "$duration"}}}]
-        average = mongo.db.results.aggregate(
-            aggregation)['result'][0]['average']
+        aggregate = mongo.db.results.aggregate(aggregation)
+        result = aggregate['result']
+        average = result[0]['average'] if result else 0
         count = mongo.db.results.find(
             {'name': name, 'module': module}).count()
         fail_count = mongo.db.results.find(
