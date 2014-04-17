@@ -16,6 +16,8 @@
   {% for test in tests %}
     {% if test.status == "pass" %}
       {% set lgi = "list-group-item-success"%}
+    {% elif test.status == "flappy" %}
+      {% set lgi = "list-group-item-warning"%}
     {% else %}
       {% set lgi = "list-group-item-danger"%}
     {% endif %}
@@ -25,9 +27,8 @@
             {{test.name}}
       </span>
       <span class="right">
-<!--           <span class="total"><strong>total: </strong>10</span>
-          <span class="average"><strong>average: </strong>7s</span>
-          <span class="current"><strong>current: </strong>5s</span> -->
+          <span class="total"><strong>total: </strong>{{test.count}}</span>
+          <span class="average"><strong>average: </strong>{{test.average}}</span>
       </span>
     </a>
     

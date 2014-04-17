@@ -13,35 +13,25 @@
   <h2>all tests</h2>
 </div>
 <div class="list-group">
-  <a href="/cancellation/basic" class="list-group-item list-group-item-success">
-    <span class="left">
-          passing test
-    </span>
-    <span class="right">
-        <span class="total"><strong>total: </strong>10</span>
-        <span class="average"><strong>average: </strong>7s</span>
-        <span class="current"><strong>current: </strong>5s</span>
-    </span>
-  </a>
-  <a href="#" class="list-group-item list-group-item-warning">
+  {% for test in results %}
+    {% if test.status == "pass" %}
+      {% set lgi = "list-group-item-success"%}
+    {% elif test.status == "flappy" %}
+      {% set lgi = "list-group-item-warning"%}
+    {% else %}
+      {% set lgi = "list-group-item-danger"%}
+    {% endif %}
+
+    <a href="/{{test.module}}/{{test.name}}" class="list-group-item {{lgi}}">
       <span class="left">
-            flappy test
+            {{test.module}}.{{test.name}}
       </span>
       <span class="right">
-          <span class="total"><strong>total: </strong>10</span>
-          <span class="average"><strong>average: </strong>7s</span>
-          <span class="current"><strong>current: </strong>5s</span>
+          <span class="duration"><strong>duration: </strong>{{test.duration}}s</span>
+          <span class="average"><strong>average: </strong>{{test.average}}s</span>
       </span>
-  </a>
-  <a href="#" class="list-group-item list-group-item-danger">
-      <span class="left">
-            failing test
-      </span>
-      <span class="right">
-          <span class="total"><strong>total: </strong>10</span>
-          <span class="average"><strong>average: </strong>7s</span>
-          <span class="current"><strong>current: </strong>5s</span>
-      </span>
-  </a>
+    </a>
+    
+  {% endfor %}
 </div>
 {% endblock %}
