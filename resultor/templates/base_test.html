@@ -10,6 +10,11 @@
 {% endblock %}
 
 {% block body %}
+<ol class="breadcrumb">
+  <li><a href="/modules">All Modules</a></li>
+  <li><a href="/{{info.module}}">{{info.module}}</a></li>
+</ol>
+
     <div class="summary">
         <div class="page-header">
             <h1>{{info.name}}</h1>
