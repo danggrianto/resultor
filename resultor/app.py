@@ -8,6 +8,8 @@ from flask.ext.restful import Api, Resource
 
 
 app = Flask(__name__)
+# use mongodb on evo
+app.config['MONGO_HOST'] = '10.212.0.249'
 app.config['MONGO_DBNAME'] = 'resultor'
 mongo = PyMongo(app)
 api = Api(app)
@@ -15,7 +17,16 @@ api = Api(app)
 
 @app.route("/")
 def Index():
-    return render_template('index.html')
+    groups = mongo.db.results.aggregate(
+        [{'$group': {'_id': {'module': "$module", 'name': "$name"}}}])['result']
+    results = []
+    for group in groups:
+        result = mongo.db.results.find(group['_id']).sort('timestamp', -1)[0]
+        info = mongo.db.info.find_one(group['_id'])
+        result['status'] = info['status']
+        result['average'] = info['average']
+        results.append(result)
+    return render_template('index.html', results=results)
 
 
 @app.route("/modules")
@@ -23,7 +34,7 @@ def all_modules():
     modules = mongo.db.info.aggregate(
         [{'$group': {
             '_id': '$module',
-            'status': {'$addToSet': '$status'}
+            'status': {'$addToSet': '$status'},
         }}])['result']
     return render_template("modules.html", modules=modules)
 
@@ -69,6 +80,7 @@ class Result(Resource):
         mongo.db.results.insert(json)
         module = json['module']
         name = json['name']
+        current_status = json['status']
         aggregation = [
             {'$match': {
                 'module': module, 'name': name, 'status': 'pass'}},
@@ -81,10 +93,20 @@ class Result(Resource):
             {'name': name, 'module': module}).count()
         fail_count = mongo.db.results.find(
             {'name': name, 'module': module, 'status': 'fail'}).count()
+        try:
+            flappy = mongo.db.info.find_one(
+                {'name': name, 'module': module})['flappy']
+        except:
+            flappy = False
+        current_status = 'flappy' if flappy and (current_status == 'fail')\
+            else current_status
         mongo.db.info.update(
             {'name': name, 'module': module},
             {'$set': {
-                'average': average, 'count': count, 'fail_count': fail_count
+                'average': average,
+                'count': count,
+                'fail_count': fail_count,
+                'status': current_status
             }}, True)
         return {}
 
