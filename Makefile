@@ -19,7 +19,7 @@ NOSE = $(ENVDIR)/bin/nosetests
 PEP8 = $(ENVDIR)/bin/pep8
 PEP257 = $(ENVDIR)/bin/pep257
 PIP = C_INCLUDE_PATH="/opt/local/include:/usr/local/include" $(ENVDIR)/bin/pip
-PIPOPTS=$(patsubst %,-r %,$(wildcard $(HOME)/.requirements.pip requirements.pip)) --index-url=$(PYTHON_INDEX_URL)
+PIPOPTS=$(patsubst %,-r %,$(wildcard $(HOME)/.requirements.txt requirements.txt)) --index-url=$(PYTHON_INDEX_URL)
 PYLINT = $(ENVDIR)/bin/pylint
 PYTHON = $(ENVDIR)/bin/python
 PYTHON_INDEX_URL = http://pypi.colo.lair/simple/
@@ -92,7 +92,7 @@ requirements:
 	$(MAKE) .req
 
 req: .req
-.req: $(ENVDIR) requirements.pip
+.req: $(ENVDIR) requirements.txt
 	$(PIP) install $(PIPOPTS)
 	@touch .req
 

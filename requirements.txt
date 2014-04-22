@@ -8,18 +8,9 @@ gunicorn
 # DO NOT remove/modify the dependencies below. #
 # They are requirements of the deploy process. #
 ################################################
-Fabric
 Jinja2
-PyChef
-Pygments
-Sphinx
-caterer
 coverage
 docutils
-honcho
-logilab-astng
-logilab-common
-mock
 nose
 nosy
 pep8
