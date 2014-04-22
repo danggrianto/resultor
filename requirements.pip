@@ -2,6 +2,7 @@ Flask==0.10.1
 pymongo==2.6.3
 Flask-PyMongo==0.3.0
 flask-restful
+gunicorn
 
 ################################################
 # DO NOT remove/modify the dependencies below. #
