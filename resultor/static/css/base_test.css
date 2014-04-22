@@ -9,3 +9,8 @@
 .right span {
     margin: 10px;
 }
+
+.stacktrace {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}

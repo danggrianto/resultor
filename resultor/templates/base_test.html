@@ -17,7 +17,7 @@
 
     <div class="summary">
         <div class="page-header">
-            <h1>{{info.name}}</h1>
+            <h3>{{info.name}}</h3>
         </div>
         <p>Current Status: {{info.status}}</p>
         <p>Total Tests: {{results.count()}}</p>
@@ -48,11 +48,9 @@
             </div>
             {% if result.status == "fail" %}
             <div class="panel-body">
-              <div class="stacktrace">
-                  {{result.stacktrace}}
-              </div>
-              <a href="#" onclick="toggle_visibility('screenshot-1');">Show/Hide Screenshot</a>
+              <div class="stacktrace">{{result.trace}}</div>
               <div id="screenshot-1" class="screenshot" style="display: none;">
+                  <a href="#" onclick="toggle_visibility('screenshot-1');">Show/Hide Screenshot</a>
                   <img src="{{result.img}}" alt="">
               </div>
             </div>

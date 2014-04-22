@@ -9,8 +9,9 @@ from flask.ext.restful import Api, Resource
 
 app = Flask(__name__)
 # use mongodb on evo
-app.config['MONGO_HOST'] = '10.212.0.249'
-app.config['MONGO_DBNAME'] = 'resultor'
+# app.config['MONGO_HOST'] = '10.212.0.249'
+# app.config['MONGO_DBNAME'] = 'resultor'
+app.config['MONGO_URI'] = 'mongodb://aweber:aweber1100@oceanic.mongohq.com:10007/resultor'
 mongo = PyMongo(app)
 api = Api(app)
 
@@ -69,40 +70,41 @@ def show_test(module, name):
 
 class Result(Resource):
     def put(self):
-        json = request.get_json(force=True)
-        json['timestamp'] = int(round(time.time() * 1000))
-        mongo.db.results.insert(json)
-        module = json['module']
-        name = json['name']
-        current_status = json['status']
-        aggregation = [
-            {'$match': {
-                'module': module, 'name': name, 'status': 'pass'}},
-            {'$group': {
-                '_id': {'name': '$name', 'module': '$module'},
-                'average': {'$avg': "$duration"}}}]
-        aggregate = mongo.db.results.aggregate(aggregation)
-        result = aggregate['result']
-        average = result[0]['average'] if result else 0
-        count = mongo.db.results.find(
-            {'name': name, 'module': module}).count()
-        fail_count = mongo.db.results.find(
-            {'name': name, 'module': module, 'status': 'fail'}).count()
-        try:
-            flappy = mongo.db.info.find_one(
-                {'name': name, 'module': module})['flappy']
-        except:
-            flappy = False
-        current_status = 'flappy' if flappy and (current_status == 'fail')\
-            else current_status
-        mongo.db.info.update(
-            {'name': name, 'module': module},
-            {'$set': {
-                'average': average,
-                'count': count,
-                'fail_count': fail_count,
-                'status': current_status
-            }}, True)
+        results = request.get_json(force=True)
+        for json in results:
+            json['timestamp'] = int(round(time.time() * 1000))
+            mongo.db.results.insert(json)
+            module = json['module']
+            name = json['name']
+            current_status = json['status']
+            aggregation = [
+                {'$match': {
+                    'module': module, 'name': name, 'status': 'pass'}},
+                {'$group': {
+                    '_id': {'name': '$name', 'module': '$module'},
+                    'average': {'$avg': "$duration"}}}]
+            aggregate = mongo.db.results.aggregate(aggregation)
+            result = aggregate['result']
+            average = round(result[0]['average'], 2) if result else 0
+            count = mongo.db.results.find(
+                {'name': name, 'module': module}).count()
+            fail_count = mongo.db.results.find(
+                {'name': name, 'module': module, 'status': 'fail'}).count()
+            try:
+                flappy = mongo.db.info.find_one(
+                    {'name': name, 'module': module})['flappy']
+            except:
+                flappy = False
+            current_status = 'flappy' if flappy and (current_status == 'fail')\
+                else current_status
+            mongo.db.info.update(
+                {'name': name, 'module': module},
+                {'$set': {
+                    'average': average,
+                    'count': count,
+                    'fail_count': fail_count,
+                    'status': current_status
+                }}, True)
         return {}
 
 
