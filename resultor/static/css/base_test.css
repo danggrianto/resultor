@@ -14,3 +14,8 @@
     white-space: pre-wrap;
     word-wrap: break-word;
 }
+
+iframe{
+    height: 600px;
+    width: 100%;
+}
