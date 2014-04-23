@@ -11,6 +11,44 @@
 {% block body %}
 <div class="page-header">
   <h2>all tests</h2>
+  <form class="form-horizontal" action="/" method=post>
+  <div class="sort">sort by
+    <!-- Single button -->
+    <div class="btn-group">
+      <div class="control-group">
+        <div class="controls">
+
+        {% set sort_options = [
+            ('time', 'Time'),
+            ('name', 'Name'),
+            ('average', 'Average Duration'),
+            ('duration', 'Last Duration'),
+            ('status', 'Status')
+        ] -%}
+        {% set directions = [
+            ('1', 'Ascending'),
+            ('-1', 'Descending')
+        ] -%}
+          <select id="sort" name="sort" class="input-medium" onchange="this.form.submit();">
+            {% for value, name in sort_options %}
+              <option value="{{value}}" {% if sort==value %}
+                selected 
+              {% endif %}>{{name}} </option>
+            {% endfor %}
+          </select>
+          <select id="direction" name="direction" class="input-medium" onchange="this.form.submit();">
+            {% for value, name in directions %}
+              <option value="{{value}}" {% if direction==value %}
+                selected 
+              {% endif %}>{{name}} </option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </form>
 </div>
 <div class="list-group">
   {% for test in results %}

@@ -11,23 +11,23 @@ app = Flask(__name__)
 # use mongodb on evo
 # app.config['MONGO_HOST'] = '10.212.0.249'
 # app.config['MONGO_DBNAME'] = 'resultor'
-app.config['MONGO_URI'] = 'mongodb://aweber:aweber1100@oceanic.mongohq.com:10007/resultor'
+app.config['MONGO_URI'] =\
+    'mongodb://aweber:aweber1100@oceanic.mongohq.com:10007/resultor'
 mongo = PyMongo(app)
 api = Api(app)
 
 
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def Index():
-    groups = mongo.db.results.aggregate(
-        [{'$group': {'_id': {'module': "$module", 'name': "$name"}}}])['result']
-    results = []
-    for group in groups:
-        result = mongo.db.results.find(group['_id']).sort('timestamp', -1)[0]
-        info = mongo.db.info.find_one(group['_id'])
-        result['status'] = info['status']
-        result['average'] = info['average']
-        results.append(result)
-    return render_template('index.html', results=results)
+    results = mongo.db.info.find()
+    sort = 'time'
+    direction = 1
+    if request.method == "POST":
+        sort = request.form['sort']
+        direction = request.form['direction']
+    results = results.sort(sort, int(direction))
+    return render_template(
+        'index.html', results=results, sort=sort, direction=direction)
 
 
 @app.route("/modules")
@@ -72,11 +72,13 @@ class Result(Resource):
     def put(self):
         results = request.get_json(force=True)
         for json in results:
-            json['timestamp'] = int(round(time.time() * 1000))
+            timestamp = int(round(time.time() * 1000))
+            json['timestamp'] = timestamp
             mongo.db.results.insert(json)
             module = json['module']
             name = json['name']
             current_status = json['status']
+            duration = json['duration']
             aggregation = [
                 {'$match': {
                     'module': module, 'name': name, 'status': 'pass'}},
@@ -103,7 +105,9 @@ class Result(Resource):
                     'average': average,
                     'count': count,
                     'fail_count': fail_count,
-                    'status': current_status
+                    'status': current_status,
+                    'duration': duration,
+                    'timestamp': timestamp
                 }}, True)
         return {}
 
