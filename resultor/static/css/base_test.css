@@ -19,3 +19,9 @@ iframe{
     height: 600px;
     width: 100%;
 }
+
+h3{
+      /*width: 250px;*/
+  white-space: nowrap;
+  overflow: scroll;
+}

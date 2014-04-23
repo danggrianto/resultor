@@ -108,6 +108,15 @@ class Result(Resource):
         return {}
 
 
+def short_string(long_string):
+    if long_string.__len__() > 100:
+        short = '...{0}'.format(long_string[-100:])
+    else:
+        short = long_string
+    return short
+
+app.jinja_env.globals.update(short_string=short_string)
+
 api.add_resource(Result, '/api/result')
 
 
