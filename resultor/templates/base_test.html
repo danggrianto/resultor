@@ -49,8 +49,8 @@
             {% if result.status == "fail" %}
             <div class="panel-body">
               <div class="stacktrace">{{result.trace}}</div>
-              <a href="#" onclick="toggle_visibility('screenshot-1');">Show/Hide Screenshot</a>
-              <div id="screenshot-1" class="screenshot" style="display: none;">
+              <a href="#" onclick="toggle_visibility('screenshot-{{loop.index}}');">Show/Hide Screenshot</a>
+              <div id="screenshot-{{loop.index}}" class="screenshot" style="display: none;">
                   <iframe src="{{result.screenshot}}" alt=""></iframe>
               </div>
             </div>
